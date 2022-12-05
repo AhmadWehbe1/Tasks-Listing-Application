@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a {
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+
+.loading {
+  opacity: 0.5;
+}
+
+.completed {
+  -webkit-text-decoration-line: line-through; /* Safari */
+  text-decoration-line: line-through;
+}

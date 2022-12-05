@@ -1,19 +1,35 @@
-const express = require('express')
-const port = 8000
-const helmet = require("helmet");
-const morgan = require('morgan')
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const auth = require("./middlewares/auth");
+const { init } = require("./database");
 
+init();
+
+const { Register, Login, me, Uploads } = require("./handlers/Auth");
+const {
+  addTask,
+  getTasks,
+  deleteTask,
+  updateTask,
+} = require("./handlers/Tasks");
+
+const PORT = process.env.PORT || 8000;
 
 express()
+  .use(cors())
+  .use(express.json())
+  // .use(helmet())
+  // .use(morgan("tiny"))
+  .post("/register", Register)
+  .post("/login", Login)
+  .get("/me", auth, me)
 
-    .use(express.json())
-    .use(helmet())
-    .use(morgan('tiny'))
+  .post("/add-task", auth, addTask)
+  .get("/get-tasks", auth, getTasks)
+  .delete("/delete-task", auth, deleteTask)
+  .put("/update-task", auth, updateTask)
 
-    .get('/hello', (req, res) => {
-        res.status(200).json({status: 200, message: "Hello World!"});
-    })
-
-    .listen(port, () => {
-        console.log(`Example app listening on port ${port}`)
-    });
+  .listen(PORT, () => {
+    console.log(`Server is Running on PORT ${PORT}`);
+  });
